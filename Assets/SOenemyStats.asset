@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7d6e061039de6441ad6d7b3b1bd31ef, type: 3}
+  m_Name: SOenemyStats
+  m_EditorClassIdentifier: 
+  targetDistance: 1.3
+  smoothing: 1
+  MovementSpeed: 0.132
+  SpecialMoveDuration: 10
