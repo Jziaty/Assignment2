@@ -13,4 +13,6 @@ public class EnemyStats : ScriptableObject {
     public float MovementSpeed = 1f;
     [Range(0f, 10f)]
     public float SpecialMoveDuration = 5f;
+
+    public int Count;
 }

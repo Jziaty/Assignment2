@@ -5,16 +5,23 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour {
 
     public EnemyStats EnemyStatsInstance;
-    
     public Transform target;
     
-    public int Count;
 
 	void Start () {
+        EnemyStatsInstance.Count = 0;
         StartCoroutine(Movement(target));
 	}
-	
-	IEnumerator Movement (Transform target)
+
+    void FixedUpdate()
+    {
+        if (EnemyStatsInstance.Count >= 3)
+        {
+            InverseGravity();
+        }
+    }
+
+    IEnumerator Movement (Transform target)
     {
         while (Vector3.Distance(transform.position, target.position) * EnemyStatsInstance.MovementSpeed > EnemyStatsInstance.targetDistance)
         {
@@ -25,11 +32,16 @@ public class EnemyMovement : MonoBehaviour {
             yield return null;
         }
 
+        EnemyStatsInstance.Count++;
         print("Reached the target.");
-        Count++;
 
         yield return new WaitForSeconds(3f);
 
         print("Courotine 'Movement' is now finished.");
+    }
+
+    public void InverseGravity()
+    {
+        // Do shit
     }
 }
