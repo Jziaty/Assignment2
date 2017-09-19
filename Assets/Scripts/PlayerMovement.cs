@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
-    [Range(50f, 200f)]
+    [Range(0f, 200f)]
     public float Force;
 
-    [Range(100f, 500f)]
+    [Range(0f, 500f)]
     public float JumpForce;
 
     public Rigidbody rb;
@@ -19,15 +19,14 @@ public class PlayerMovement : MonoBehaviour {
         Force = 100f;
         JumpForce = 200f;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        
-	}
 
     void OnCollisionStay(Collision collision)
     {
-        isGrounded = true;
+        if (collision.transform.tag == "Ground")
+        {
+            isGrounded = true;
+        }
+            
     }
 
     void OnCollisionExit(Collision collision)

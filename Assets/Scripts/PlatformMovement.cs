@@ -4,37 +4,47 @@ using UnityEngine;
 
 public class PlatformMovement : MonoBehaviour
 {
+    
+    public Transform position1;
+    public Transform position2;
+    public Vector3 newPosition;
 
-    public int Movementspeed;
-    public Rigidbody rb;
+    public string currentState;
+    public float resetTime;
 
-    public Transform target1;
-    public Transform target2;
-    public Transform target3;
-
-    private Transform InitPos;
-
-    private void Start()
+    // Use this for initialization
+    void Start()
     {
-        InitPos = transform;
-        Movementspeed = 1;
-
-        StartCoroutine(Movement(target1));
-        StartCoroutine(Movement(target2));
-        StartCoroutine(Movement(target3));
-        StartCoroutine(Movement(InitPos));
+        resetTime = 14f;
+        currentState = "";
+        ChangeTarget();
     }
 
-    IEnumerator Movement(Transform target)
+    // Update is called once per frame
+    void FixedUpdate()
     {
-        while (Vector3.Distance(transform.position, target.position) /* Movementspeed*/ > 0.0f)
-        {
-            //Hier een add force gaan gebruiken ipv lerp waarschijnlijk helpt dat met collision
-            transform.position = Vector3.Lerp(transform.position, target.position, 1f * Time.deltaTime);
-            //transform.position = rb.AddForce(target.position - transform.position);
-            
+        //movingPlatform.position = Vector3.Lerp(movingPlatform.position, newPosition, smooth);
+        transform.position = Vector3.MoveTowards(transform.position, newPosition, 0.1f);
+               
+    }
 
-            yield return null;
+    void ChangeTarget()
+    {
+        if (currentState == "Moving To Position 1")
+        {
+            currentState = "Moving To Position 2";
+            newPosition = position2.position;
         }
+        else if (currentState == "Moving To Position 2")
+        {
+            currentState = "Moving To Position 1";
+            newPosition = position1.position;
+        }
+        else if (currentState == "")
+        {
+            currentState = "Moving To Position 2";
+            newPosition = position2.position;
+        }
+        Invoke("ChangeTarget", resetTime);
     }
 }

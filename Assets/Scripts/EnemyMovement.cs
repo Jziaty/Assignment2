@@ -7,6 +7,8 @@ public class EnemyMovement : MonoBehaviour {
     public EnemyStats EnemyStatsInstance;
     
     public Transform target;
+    
+    public int Count;
 
 	void Start () {
         StartCoroutine(Movement(target));
@@ -19,10 +21,12 @@ public class EnemyMovement : MonoBehaviour {
             //Hier een add force gaan gebruiken ipv lerp waarschijnlijk helpt dat met collision
             transform.position = Vector3.Lerp(transform.position, target.position, EnemyStatsInstance.smoothing * Time.deltaTime);
 
+            
             yield return null;
         }
 
         print("Reached the target.");
+        Count++;
 
         yield return new WaitForSeconds(3f);
 
