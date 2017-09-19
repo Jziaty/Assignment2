@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour {
 
     public EnemyStats EnemyStatsInstance;
+    public EnemySpecialAttack ESP;
     public Transform target;
     
 
@@ -35,13 +36,18 @@ public class EnemyMovement : MonoBehaviour {
         EnemyStatsInstance.Count++;
         print("Reached the target.");
 
+        if (EnemyStatsInstance.Count >= 3)
+        {
+            InverseGravity();
+        }
+
         yield return new WaitForSeconds(3f);
 
-        print("Courotine 'Movement' is now finished.");
+        print("Coroutine 'Movement' is now finished.");
     }
 
     public void InverseGravity()
     {
-        // Do shit
+        //ESP.SpecialAttack();
     }
 }
