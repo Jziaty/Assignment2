@@ -14,40 +14,38 @@ public class EnemyMovement : MonoBehaviour {
         StartCoroutine(Movement(target));
 	}
 
-    void FixedUpdate()
-    {
+     void FixedUpdate()
+     {
         if (EnemyStatsInstance.Count >= 3)
         {
-            InverseGravity();
+            GiveDistance();
         }
-    }
+        
+     }
 
-    IEnumerator Movement (Transform target)
+    IEnumerator Movement(Transform target)
     {
         while (Vector3.Distance(transform.position, target.position) * EnemyStatsInstance.MovementSpeed > EnemyStatsInstance.targetDistance)
         {
             //Hier een add force gaan gebruiken ipv lerp waarschijnlijk helpt dat met collision
             transform.position = Vector3.Lerp(transform.position, target.position, EnemyStatsInstance.smoothing * Time.deltaTime);
 
-            
+
             yield return null;
         }
 
         EnemyStatsInstance.Count++;
         print("Reached the target.");
 
-        if (EnemyStatsInstance.Count >= 3)
-        {
-            InverseGravity();
-        }
-
-        yield return new WaitForSeconds(3f);
-
         print("Coroutine 'Movement' is now finished.");
+
+
     }
 
-    public void InverseGravity()
+    public void GiveDistance()
     {
-        //ESP.SpecialAttack();
+        EnemyStatsInstance.Count = 0;
+        ESP.SpecialAttack(EnemyStatsInstance.targetDistance); 
+        
     }
 }

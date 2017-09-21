@@ -4,22 +4,32 @@ using UnityEngine;
 
 public class EnemySpecialAttack : MonoBehaviour {
 
+    public GameObject InvVolume;
+    public GameObject Player;
+
+    private CapsuleCollider capCol;
     private float grav;
 
 	// Use this for initialization
 	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+        InvVolume = GameObject.FindGameObjectWithTag("InvVolume");
+        Player = GameObject.FindGameObjectWithTag("Player");
+
+        InvVolume.SetActive(false);
 	}
 
-    public void SpecialAttack()
+    public void SpecialAttack(float Distance)
     {
-        //Use a Capsule collider and within this collider, I need to change the gravity.
-        grav = Physics.gravity.y;
-        //Multiply grav by -1 for the duration given in the SO.
+        InvVolume.SetActive(true);
+        capCol = GetComponent<CapsuleCollider>();
+        capCol.radius = Distance;
+
+        InverseGravity();
+    }
+    
+    void InverseGravity()
+    {
+        Physics.gravity = Physics.gravity * -1;
+        Debug.Log(Physics.gravity);
     }
 }

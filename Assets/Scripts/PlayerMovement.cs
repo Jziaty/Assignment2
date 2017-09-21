@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour {
         
 
         //transform.position += new Vector3(vertical, 0, -horizontal) * MovementSpeed;
-        rb.AddRelativeForce(vertical * Force, 0, 0/*-horizontal * Force*/);
+        rb.AddRelativeForce(vertical * Force, 0, 0);
 
         rb.AddTorque(0, horizontal * Force, 0);
 
