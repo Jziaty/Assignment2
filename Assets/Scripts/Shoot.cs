@@ -22,7 +22,7 @@ public class Shoot : MonoBehaviour {
                 instantiatedProjectile.velocity = transform.TransformDirection(new Vector3(0, 0, speed));
                 
                 instantiatedProjectile.transform.parent = Bullets;
-                Destroy(instantiatedProjectile.gameObject, 5f);
+                Destroy(instantiatedProjectile.gameObject, 2.5f);
             }
             
         }

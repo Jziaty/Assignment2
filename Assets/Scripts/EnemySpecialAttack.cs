@@ -6,30 +6,79 @@ public class EnemySpecialAttack : MonoBehaviour {
 
     public GameObject InvVolume;
     public GameObject Player;
+    public GameObject[] Enemies;
 
     private CapsuleCollider capCol;
+    private Rigidbody rbN;
     private float grav;
+    private float SpecDur;
+    private bool GravityInversed;
 
 	// Use this for initialization
 	void Start () {
         InvVolume = GameObject.FindGameObjectWithTag("InvVolume");
         Player = GameObject.FindGameObjectWithTag("Player");
+        Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        capCol = GetComponent<CapsuleCollider>();
 
         InvVolume.SetActive(false);
 	}
 
-    public void SpecialAttack(float Distance)
+    void Update()
+    {
+        if (GravityInversed == true)
+        {
+            CheckDuration(SpecDur);
+        }
+    }
+
+    public void SpecialAttack(float Distance, float time)
     {
         InvVolume.SetActive(true);
-        capCol = GetComponent<CapsuleCollider>();
         capCol.radius = Distance;
 
-        InverseGravity();
+        InverseGravity(time);
     }
     
-    void InverseGravity()
+    void InverseGravity(float time)
     {
-        Physics.gravity = Physics.gravity * -1;
+        GravityInversed = true;
+
+        if (Enemies != null)
+        {
+            for (int i = 0; i < Enemies.Length; i++)
+            {
+                rbN = Enemies[i].GetComponent<Rigidbody>();
+                rbN.useGravity = false;
+            }
+        } else
+        {
+            Debug.Log("No enemies found");
+        }        
+        
         Debug.Log(Physics.gravity);
+
+        CheckDuration(time);
+    }
+
+    void CheckDuration(float Duration)
+    {
+        SpecDur = Duration;
+        
+        Debug.Log(Duration);
+        if (Duration > 0)
+        {
+            Physics.gravity = Physics.gravity * -1;
+        }
+        else if (Duration <= 0)
+        {
+            Physics.gravity = Physics.gravity * -1;
+            for (int i = 0; i < Enemies.Length; i++)
+            {
+                rbN = Enemies[i].GetComponent<Rigidbody>();
+                rbN.useGravity = true;
+                GravityInversed = false;
+            }
+        }
     }
 }

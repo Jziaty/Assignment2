@@ -35,17 +35,23 @@ public class EnemyMovement : MonoBehaviour {
         }
 
         EnemyStatsInstance.Count++;
-        print("Reached the target.");
+        //print("Reached the target.");
+        if(EnemyStatsInstance.Count == 3)
+        {
+            GiveDistance();
+        }
+        
 
-        print("Coroutine 'Movement' is now finished.");
+        //print("Coroutine 'Movement' is now finished.");
 
 
     }
 
     public void GiveDistance()
     {
+
         EnemyStatsInstance.Count = 0;
-        ESP.SpecialAttack(EnemyStatsInstance.targetDistance); 
+        ESP.SpecialAttack(EnemyStatsInstance.targetDistance, EnemyStatsInstance.SpecialMoveDuration); 
         
     }
 }
