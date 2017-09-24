@@ -54,4 +54,12 @@ public class EnemyMovement : MonoBehaviour {
         ESP.SpecialAttack(EnemyStatsInstance.targetDistance, EnemyStatsInstance.SpecialMoveDuration); 
         
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag == "Bullet")
+        {
+            Destroy(gameObject, 1f);
+        }
+    }
 }

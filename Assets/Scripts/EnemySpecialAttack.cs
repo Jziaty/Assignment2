@@ -12,7 +12,9 @@ public class EnemySpecialAttack : MonoBehaviour {
     private Rigidbody rbN;
     private float grav;
     private float SpecDur;
-    private bool GravityInversed;
+    public bool GravityInversed;
+
+    private float elapsedtime;
 
 	// Use this for initialization
 	void Start () {
@@ -26,6 +28,7 @@ public class EnemySpecialAttack : MonoBehaviour {
 
     void Update()
     {
+        elapsedtime += Time.deltaTime;
         if (GravityInversed == true)
         {
             CheckDuration(SpecDur);
@@ -64,20 +67,24 @@ public class EnemySpecialAttack : MonoBehaviour {
     void CheckDuration(float Duration)
     {
         SpecDur = Duration;
+
         
-        Debug.Log(Duration);
-        if (Duration > 0)
+        
+        Debug.Log(elapsedtime);
+
+        if (elapsedtime < Duration && GravityInversed)
         {
             Physics.gravity = Physics.gravity * -1;
+            GravityInversed = false;
         }
-        else if (Duration <= 0)
+        else if (elapsedtime >= Duration && !GravityInversed)
         {
             Physics.gravity = Physics.gravity * -1;
             for (int i = 0; i < Enemies.Length; i++)
             {
                 rbN = Enemies[i].GetComponent<Rigidbody>();
                 rbN.useGravity = true;
-                GravityInversed = false;
+                //GravityInversed = false;
             }
         }
     }
