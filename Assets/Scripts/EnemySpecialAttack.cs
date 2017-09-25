@@ -15,6 +15,7 @@ public class EnemySpecialAttack : MonoBehaviour {
     public bool GravityInversed;
 
     private float elapsedtime;
+    private bool startTime;
 
 	// Use this for initialization
 	void Start () {
@@ -28,8 +29,12 @@ public class EnemySpecialAttack : MonoBehaviour {
 
     void Update()
     {
-        elapsedtime += Time.deltaTime;
-        if (GravityInversed == true)
+        if (startTime == true)
+        {
+            elapsedtime += Time.deltaTime;
+        }
+        
+        if (elapsedtime <= SpecDur * 2)
         {
             CheckDuration(SpecDur);
         }
@@ -45,7 +50,7 @@ public class EnemySpecialAttack : MonoBehaviour {
     
     void InverseGravity(float time)
     {
-        GravityInversed = true;
+        //GravityInversed = true;
 
         if (Enemies != null)
         {
@@ -67,24 +72,30 @@ public class EnemySpecialAttack : MonoBehaviour {
     void CheckDuration(float Duration)
     {
         SpecDur = Duration;
-
-        
-        
+        startTime = true;
+        GravityInversed = true;
         Debug.Log(elapsedtime);
 
-        if (elapsedtime < Duration && GravityInversed)
+        if (elapsedtime < Duration)
         {
-            Physics.gravity = Physics.gravity * -1;
-            GravityInversed = false;
+            if(Physics.gravity == new Vector3(0, -9.81f, 0))
+            {
+                Physics.gravity = Physics.gravity * -1;
+                
+            }            
         }
-        else if (elapsedtime >= Duration && !GravityInversed)
+        else if (elapsedtime >= Duration && GravityInversed)
         {
-            Physics.gravity = Physics.gravity * -1;
+            if (Physics.gravity == new Vector3(0, 9.81f, 0))
+            {
+                Physics.gravity = Physics.gravity * -1;
+                GravityInversed = false;
+            }
+                
             for (int i = 0; i < Enemies.Length; i++)
             {
                 rbN = Enemies[i].GetComponent<Rigidbody>();
                 rbN.useGravity = true;
-                //GravityInversed = false;
             }
         }
     }
