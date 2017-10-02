@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour {
 
+    public delegate void targetReached();
+    public static event targetReached OnReach;
+
     public EnemyStats EnemyStatsInstance;
     public EnemySpecialAttack ESP;
     public Transform target;
@@ -14,12 +17,8 @@ public class EnemyMovement : MonoBehaviour {
         StartCoroutine(Movement(target));
 	}
 
-     void FixedUpdate()
+     void Update()
      {
-        if (EnemyStatsInstance.Count >= 3)
-        {
-            GiveDistance();
-        }
         
      }
 
@@ -36,22 +35,28 @@ public class EnemyMovement : MonoBehaviour {
 
         EnemyStatsInstance.Count++;
         //print("Reached the target.");
-        if(EnemyStatsInstance.Count == 3)
-        {
-            GiveDistance();
-        }
-        
+        targetIsReached();
+
 
         //print("Coroutine 'Movement' is now finished.");
 
 
     }
 
-    public void GiveDistance()
+    public void targetIsReached()
     {
-
-        EnemyStatsInstance.Count = 0;
-        ESP.SpecialAttack(EnemyStatsInstance.targetDistance, EnemyStatsInstance.SpecialMoveDuration); 
+        if (EnemyStatsInstance.Count >= 3)
+        {
+            if(OnReach != null)
+            {
+                OnReach();
+            }
+            Debug.Log("There are no functions subscribed to OnReach.");
+            
+        } else
+        {
+            //Debug.Log(EnemyStatsInstance.Count);
+        }
         
     }
 

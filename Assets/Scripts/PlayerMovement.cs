@@ -39,8 +39,6 @@ public class PlayerMovement : MonoBehaviour {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         
-
-        //transform.position += new Vector3(vertical, 0, -horizontal) * MovementSpeed;
         rb.AddRelativeForce(vertical * Force, 0, 0);
 
         rb.AddTorque(0, horizontal * Force, 0);

@@ -4,99 +4,88 @@ using UnityEngine;
 
 public class EnemySpecialAttack : MonoBehaviour {
 
-    public GameObject InvVolume;
+    public EnemyStats EStats;
+
+    public GameObject InverseVolume;
     public GameObject Player;
-    public GameObject[] Enemies;
 
     private CapsuleCollider capCol;
-    private Rigidbody rbN;
-    private float grav;
-    private float SpecDur;
     public bool GravityInversed;
 
     private float elapsedtime;
-    private bool startTime;
+    private Rigidbody rb;
+    private bool InVolume = false;
 
-	// Use this for initialization
-	void Start () {
-        InvVolume = GameObject.FindGameObjectWithTag("InvVolume");
+
+
+    void OnEnable()
+    {
+        EnemyMovement.OnReach += InverseGravity;
+        
+    }
+
+    void OnDisable()
+    {
+        EnemyMovement.OnReach -= InverseGravity;
+    }
+
+    // Use this for initialization
+    void Start () {
+        InverseVolume = GameObject.FindGameObjectWithTag("InvVolume");
         Player = GameObject.FindGameObjectWithTag("Player");
-        Enemies = GameObject.FindGameObjectsWithTag("Enemy");
         capCol = GetComponent<CapsuleCollider>();
-
-        InvVolume.SetActive(false);
+        rb = Player.GetComponent<Rigidbody>();
+        
 	}
 
     void Update()
     {
-        if (startTime == true)
+        if (GravityInversed == true)
         {
             elapsedtime += Time.deltaTime;
-        }
-        
-        if (elapsedtime <= SpecDur * 2)
-        {
-            CheckDuration(SpecDur);
-        }
-    }
-
-    public void SpecialAttack(float Distance, float time)
-    {
-        InvVolume.SetActive(true);
-        capCol.radius = Distance;
-
-        InverseGravity(time);
-    }
-    
-    void InverseGravity(float time)
-    {
-        //GravityInversed = true;
-
-        if (Enemies != null)
-        {
-            for (int i = 0; i < Enemies.Length; i++)
+            if (elapsedtime > EStats.SpecialMoveDuration)
             {
-                rbN = Enemies[i].GetComponent<Rigidbody>();
-                rbN.useGravity = false;
-            }
-        } else
-        {
-            Debug.Log("No enemies found");
-        }        
-        
-        Debug.Log(Physics.gravity);
-
-        CheckDuration(time);
-    }
-
-    void CheckDuration(float Duration)
-    {
-        SpecDur = Duration;
-        startTime = true;
-        GravityInversed = true;
-        Debug.Log(elapsedtime);
-
-        if (elapsedtime < Duration)
-        {
-            if(Physics.gravity == new Vector3(0, -9.81f, 0))
-            {
-                Physics.gravity = Physics.gravity * -1;
-                
-            }            
-        }
-        else if (elapsedtime >= Duration && GravityInversed)
-        {
-            if (Physics.gravity == new Vector3(0, 9.81f, 0))
-            {
-                Physics.gravity = Physics.gravity * -1;
                 GravityInversed = false;
+                rb.useGravity = true;
             }
-                
-            for (int i = 0; i < Enemies.Length; i++)
-            {
-                rbN = Enemies[i].GetComponent<Rigidbody>();
-                rbN.useGravity = true;
-            }
+            Debug.Log(elapsedtime);
         }
+    }
+
+    private void FixedUpdate()
+    {
+        if (GravityInversed)
+        {
+            rb.AddForce(0f, 9.81f, 0f);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.LogWarning(other.transform.name + " found in collider.");
+        if (other.transform.tag == "Player")
+        {
+
+            InVolume = true;
+        }
+    }
+
+    void InverseGravity()
+    {
+        EStats.Count = 0;
+        
+        capCol.radius = EStats.targetDistance;
+        
+        if (InVolume)
+        {
+            rb.useGravity = false;
+            GravityInversed = true;
+
+        }
+        else
+        {
+            Debug.LogError("In Volume not becoming true");
+        }
+        
     }
 }

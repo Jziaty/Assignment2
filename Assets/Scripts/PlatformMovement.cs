@@ -11,23 +11,19 @@ public class PlatformMovement : MonoBehaviour
 
     public string currentState;
     public float resetTime;
-
-    //private Rigidbody rb;
+    
 
     // Use this for initialization
     void Start()
     {
-        //rb = GetComponent<Rigidbody>();
         resetTime = 14f;
         ChangeTarget();
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        //movingPlatform.position = Vector3.Lerp(movingPlatform.position, newPosition, smooth);
         transform.position = Vector3.MoveTowards(transform.position, newPosition, 0.1f);
-        //rb.AddRelativeForce(Vector3.forward);
                
     }
 

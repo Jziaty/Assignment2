@@ -14,5 +14,5 @@ MonoBehaviour:
   targetDistance: 1.3
   smoothing: 1
   MovementSpeed: 0.132
-  SpecialMoveDuration: 5
+  SpecialMoveDuration: 1
   Count: 1
